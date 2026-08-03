@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+<ItemGroup>
+<ProjectReference Include="..\FacilityFlow.Application\FacilityFlow.Application.csproj" />
+<ProjectReference Include="..\FacilityFlow.Domain\FacilityFlow.Domain.csproj" />
+<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.10" />
+</ItemGroup>
+</Project>

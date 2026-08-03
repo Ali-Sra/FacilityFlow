@@ -1,0 +1,8 @@
+@page "/serviceanfragen"
+@rendermode InteractiveServer
+@inject FacilityFlowApiClient Api
+<PageTitle>Serviceanfragen | FacilityFlow</PageTitle>
+<div class="title-row"><div><h1>Serviceanfragen</h1><p class="lead">Suchen und überwachen Sie alle gemeldeten Störungen.</p></div><a class="button" href="/neu">+ Neue Anfrage</a></div>
+<div class="panel filters"><input @bind="search" @bind:event="oninput" placeholder="Ticket, Titel oder Beschreibung …"/><button @onclick="Load">Suchen</button></div>
+@if(result is null){<div class="panel">Daten werden geladen …</div>}else{<div class="panel table-wrap"><table><thead><tr><th>Ticket</th><th>Titel</th><th>Gebäude</th><th>Priorität</th><th>Status</th><th>Fällig</th></tr></thead><tbody>@foreach(var item in result.Items){<tr><td><code>@item.TicketNumber</code></td><td><strong>@item.Title</strong><small>@item.Category</small></td><td>@item.BuildingName<br/><small>@item.RoomNumber</small></td><td><span class="badge @item.Priority.ToString().ToLowerInvariant()">@item.Priority</span></td><td>@item.Status</td><td class="@(item.IsOverdue?"overdue":"")">@item.DueDateUtc.ToLocalTime().ToString("dd.MM.yyyy")</td></tr>}</tbody></table><div class="table-meta">@result.TotalCount Einträge</div></div>}
+@code{private PagedResult<ServiceRequestDto>? result;private string? search;protected override async Task OnInitializedAsync()=>await Load();private async Task Load()=>result=await Api.GetRequestsAsync(search);}

@@ -1,0 +1,9 @@
+@page "/"
+@rendermode InteractiveServer
+@inject FacilityFlowApiClient Api
+<PageTitle>Übersicht | FacilityFlow</PageTitle>
+<h1>Übersicht</h1><p class="lead">Aktueller Status aller technischen Serviceanfragen.</p>
+@if(data is null){<div class="panel">Dashboard wird geladen …</div>}else{
+<div class="kpis"><div class="kpi"><span>Gesamt</span><strong>@data.Total</strong></div><div class="kpi"><span>Offen</span><strong>@data.Open</strong></div><div class="kpi danger"><span>Kritisch</span><strong>@data.Critical</strong></div><div class="kpi warning"><span>Überfällig</span><strong>@data.Overdue</strong></div><div class="kpi success"><span>Gelöst</span><strong>@data.Resolved</strong></div></div>
+<div class="grid"><div class="panel"><h3>Nach Status</h3>@foreach(var item in data.ByStatus.OrderByDescending(x=>x.Value)){<div class="bar-row"><span>@item.Key</span><div class="bar"><i style="width:@Percent(item.Value)%"></i></div><b>@item.Value</b></div>}</div><div class="panel"><h3>Nach Gebäude</h3><table><thead><tr><th>Gebäude</th><th>Anfragen</th></tr></thead><tbody>@foreach(var item in data.ByBuilding.OrderByDescending(x=>x.Value)){<tr><td>@item.Key</td><td>@item.Value</td></tr>}</tbody></table></div></div>}
+@code{private DashboardDto? data;protected override async Task OnInitializedAsync()=>data=await Api.GetDashboardAsync();private int Percent(int value)=>data?.Total>0?(int)Math.Round(value*100d/data.Total):0;}
