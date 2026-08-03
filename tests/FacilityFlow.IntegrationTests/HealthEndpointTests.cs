@@ -3,21 +3,21 @@ using Xunit;
 
 namespace FacilityFlow.IntegrationTests;
 
-public sealed class HealthEndpointTests
-    : IClassFixture<WebApplicationFactory<Program>>
+public class HealthEndpointTests : IClassFixture<WebApplicationFactory<Program>>
 {
-    private readonly HttpClient _client;
+    private readonly WebApplicationFactory<Program> _factory;
 
-    public HealthEndpointTests(
-        WebApplicationFactory<Program> factory)
+    public HealthEndpointTests(WebApplicationFactory<Program> factory)
     {
-        _client = factory.CreateClient();
+        _factory = factory;
     }
 
     [Fact]
-    public async Task HealthEndpoint_ShouldReturnSuccessStatusCode()
+    public async Task Health_Returns_OK()
     {
-        var response = await _client.GetAsync("/health");
+        var client = _factory.CreateClient();
+
+        var response = await client.GetAsync("/health");
 
         response.EnsureSuccessStatusCode();
     }
