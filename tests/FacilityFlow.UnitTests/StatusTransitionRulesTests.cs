@@ -1,4 +1,3 @@
-using Xunit;
 using FacilityFlow.Domain.Enums;
 using FacilityFlow.Domain.Rules;
 using Xunit;
@@ -14,7 +13,9 @@ public sealed class StatusTransitionRulesTests
     public void IsAllowed_WithValidTransition_ReturnsTrue(
         ServiceRequestStatus from,
         ServiceRequestStatus to)
-        => Assert.True(StatusTransitionRules.IsAllowed(from, to));
+    {
+        Assert.True(StatusTransitionRules.IsAllowed(from, to));
+    }
 
     [Theory]
     [InlineData(ServiceRequestStatus.Neu, ServiceRequestStatus.Geschlossen)]
@@ -22,5 +23,7 @@ public sealed class StatusTransitionRulesTests
     public void IsAllowed_WithInvalidTransition_ReturnsFalse(
         ServiceRequestStatus from,
         ServiceRequestStatus to)
-        => Assert.False(StatusTransitionRules.IsAllowed(from, to));
+    {
+        Assert.False(StatusTransitionRules.IsAllowed(from, to));
+    }
 }
